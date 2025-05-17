@@ -77,6 +77,12 @@ def init_session_state():
         st.session_state.chat_messages = [
             {"role": "assistant", "content": "Hello! I'm your resume assistant. Ask me any questions about resume building, job applications, or career advice!"}
         ]
+        
+    # Initialize quick chat messages
+    if 'quick_chat_messages' not in st.session_state:
+        st.session_state.quick_chat_messages = [
+            {"role": "assistant", "content": "Hi there! Need quick help with your resume? Ask me anything!"}
+        ]
 
 def get_ai_feedback(section_name, content):
     """Get AI feedback on a resume section."""
@@ -657,6 +663,57 @@ def render_chatbot():
                     st.markdown(error_message)
                     st.session_state.chat_messages.append({"role": "assistant", "content": error_message})
 
+def quick_chat():
+    """Render the quick chat interface in an expander"""
+    with st.expander("💬 Quick Resume Assistant", expanded=False):
+        st.write("Ask me any quick questions about resume building or job applications!")
+        
+        # Create a container for chat messages with a fixed height
+        chat_container = st.container()
+        with chat_container:
+            # Display only the last 4 messages to keep it compact
+            messages_to_display = st.session_state.quick_chat_messages[-4:] if len(st.session_state.quick_chat_messages) > 4 else st.session_state.quick_chat_messages
+            
+            for message in messages_to_display:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+        
+        # Get user input
+        user_query = st.text_input("Type your question here:", key="quick_chat_input")
+        
+        if st.button("Ask") and user_query:
+            # Add user message to chat history
+            st.session_state.quick_chat_messages.append({"role": "user", "content": user_query})
+            
+            # Generate response
+            with st.spinner("Thinking..."):
+                try:
+                    prompt = f"""
+                    You are a helpful resume and career assistant. Provide a brief, concise answer to this question:
+                    
+                    User question: {user_query}
+                    
+                    Keep your response under 100 words and very focused on practical advice.
+                    """
+                    
+                    response = model.generate_content(prompt)
+                    assistant_response = response.text
+                    
+                    # Add assistant response to chat history
+                    st.session_state.quick_chat_messages.append({"role": "assistant", "content": assistant_response})
+                    
+                    # Rerun to show the updated chat
+                    st.rerun()
+                    
+                except Exception as e:
+                    if "429" in str(e):
+                        error_message = "⚠️ API rate limit reached. Please try again in a few minutes."
+                    else:
+                        error_message = f"⚠️ Error: {str(e)}"
+                    
+                    st.session_state.quick_chat_messages.append({"role": "assistant", "content": error_message})
+                    st.rerun()
+
 def main():
     st.set_page_config(
         page_title="AI Resume Builder",
@@ -820,6 +877,12 @@ def main():
                 st.markdown(st.session_state.feedback)
             else:
                 st.info("AI feedback will appear here. Use the 'Get AI Feedback' buttons to receive personalized suggestions for your resume content.")
+
+    # Add a separator before the quick chat
+    st.markdown("---")
+    
+    # Add quick chat at the bottom of the page
+    quick_chat()
 
 if __name__ == "__main__":
     main() 
