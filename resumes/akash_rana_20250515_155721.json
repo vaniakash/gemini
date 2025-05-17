@@ -1,0 +1,76 @@
+{
+  "personal_info": {
+    "Full Name": "akash rana",
+    "Email": "akashrana49927@gmail.com",
+    "Phone": "07078143790",
+    "LinkedIn (optional)": "https://www.linkedin.com/feed/",
+    "Portfolio/Website (optional)": "berkysan.shop"
+  },
+  "summary": {
+    "Briefly describe your professional background and career objectives": "I am a highly motivated BCA student with strong skills in web development, especially React.js and frontend design. I have hands-on experience building real-world applications, including a food delivery app and a digital menu system for caf\u00e9s. I am currently learning full-stack development and AI integration to build intelligent systems. My career objective is to become a successful tech entrepreneur by creating scalable digital products that solve real-life problems."
+  },
+  "education": [
+    {
+      "Degree": "bca",
+      "Institution": "graphic era",
+      "Graduation Year": "2024",
+      "GPA (optional)": "7.9",
+      "Relevant Coursework (optional)": "Data Structures and Algorithms, Database Management Systems, Computer Networks, Software Engineering, Web Development (HTML, CSS, JavaScript), React.js Frontend Development, Object-Oriented Programming in C++, Introduction to AI and Machine Learning, Operating Systems, Cloud Computing Basics"
+    },
+    {
+      "Degree": "Bachelor of Computer Applications",
+      "Institution": "graphic era",
+      "Graduation Year": "2024",
+      "GPA (optional)": "7.9",
+      "Relevant Coursework (optional)": "Data Structures and Algorithms, Database Management Systems, Computer Networks, Software Engineering, Web Development (HTML, CSS, JavaScript), React.js Frontend Development, Object-Oriented Programming in C++, Introduction to AI and Machine Learning, Operating Systems, Cloud Computing Basics"
+    },
+    {
+      "Degree": "bca",
+      "Institution": "graphic era deemed to be university",
+      "Graduation Year": "2026",
+      "GPA (optional)": "8.9",
+      "Relevant Coursework (optional)": "non"
+    },
+    {
+      "Degree": "bca",
+      "Institution": "graphic era deemed to be university",
+      "Graduation Year": "2026",
+      "GPA (optional)": "8.9",
+      "Relevant Coursework (optional)": "design, web development, UX/UI design) even if GPA is not high. This showcases specific skills."
+    },
+    {
+      "Degree": "bca",
+      "Institution": "graphic era deemed to be university",
+      "Graduation Year": "2026",
+      "GPA (optional)": "8.9",
+      "Relevant Coursework (optional)": "Web Design Principles,\" \"UX/UI Design for Mobile,"
+    }
+  ],
+  "experience": [
+    {
+      "Job Title": "student",
+      "Company": "non",
+      "Start Date (MM/YYYY)": "12/2021",
+      "End Date (MM/YYYY or 'Present')": "12/2022",
+      "Description of responsibilities and achievements": "non"
+    }
+  ],
+  "skills": {
+    "Technical skills (comma separated)": "frontend devloper ",
+    "Soft skills (comma separated)": "communication skill "
+  },
+  "projects": [
+    {
+      "Project Name": "file management system",
+      "Description": "this is a project where  i use os concept to build this project ",
+      "Technologies Used": "os ,react,node , c++",
+      "URL (optional)": ""
+    }
+  ],
+  "certifications": {
+    "Certification Name": "",
+    "Issuing Organization": "",
+    "Date Obtained (MM/YYYY)": "",
+    "Expiration Date (if applicable)": ""
+  }
+}

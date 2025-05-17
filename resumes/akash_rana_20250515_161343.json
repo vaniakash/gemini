@@ -1,0 +1,48 @@
+{
+  "personal_info": {
+    "Full Name": "akash rana",
+    "Email": "akashrana49927@gmail.com",
+    "Phone": "07078143790",
+    "LinkedIn (optional)": "dfdfdfd",
+    "Portfolio/Website (optional)": "dfdf"
+  },
+  "summary": {
+    "Briefly describe your professional background and career objectives": "dfdsfdsfd sf dsf dsf ds fds fdsfdsfdsfdsf"
+  },
+  "education": [
+    {
+      "Degree": "bca",
+      "Institution": "geu",
+      "Graduation Year": "3433",
+      "GPA (optional)": "6.9",
+      "Relevant Coursework (optional)": "bca"
+    }
+  ],
+  "experience": [
+    {
+      "Job Title": "student",
+      "Company": "get",
+      "Start Date (MM/YYYY)": "33/76",
+      "End Date (MM/YYYY or 'Present')": "5756.776",
+      "Description of responsibilities and achievements": "dfdsfdsf"
+    }
+  ],
+  "skills": {
+    "Technical skills (comma separated)": "kuch nahidsfjdsf bakdschaiodof",
+    "Soft skills (comma separated)": "nasdfdsff"
+  },
+  "projects": [
+    {
+      "Project Name": "aham",
+      "Description": "not at all",
+      "Technologies Used": "react",
+      "URL (optional)": "dfdsfdsf.com"
+    }
+  ],
+  "certifications": {
+    "Certification Name": "na",
+    "Issuing Organization": "na",
+    "Date Obtained (MM/YYYY)": "na",
+    "Expiration Date (if applicable)": "na"
+  }
+}
