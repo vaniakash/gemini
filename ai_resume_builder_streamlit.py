@@ -71,6 +71,12 @@ def init_session_state():
     
     if 'feedback' not in st.session_state:
         st.session_state.feedback = ""
+        
+    # Initialize chat messages
+    if 'chat_messages' not in st.session_state:
+        st.session_state.chat_messages = [
+            {"role": "assistant", "content": "Hello! I'm your resume assistant. Ask me any questions about resume building, job applications, or career advice!"}
+        ]
 
 def get_ai_feedback(section_name, content):
     """Get AI feedback on a resume section."""
@@ -597,6 +603,60 @@ def render_projects():
                 del st.session_state.edit_project_index
             st.rerun()
 
+def render_chatbot():
+    """Render the chatbot interface"""
+    st.subheader("Resume Assistant Chatbot")
+    st.markdown("Ask me any questions about resume building, job applications, or interview preparation!")
+    
+    # Display chat messages
+    for message in st.session_state.chat_messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+    
+    # Get user input
+    user_query = st.chat_input("Type your question here...")
+    
+    if user_query:
+        # Add user message to chat history
+        st.session_state.chat_messages.append({"role": "user", "content": user_query})
+        
+        # Display user message
+        with st.chat_message("user"):
+            st.markdown(user_query)
+        
+        # Generate response
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                try:
+                    prompt = f"""
+                    You are a helpful resume and career assistant. The user is working on their resume and has a question.
+                    
+                    User question: {user_query}
+                    
+                    Provide a helpful, accurate, and concise response. Focus on practical advice that they can apply right away.
+                    If the question is about resume writing, provide specific tips and examples.
+                    If the question is about job applications or interviews, provide strategic advice.
+                    Always be encouraging and professional.
+                    """
+                    
+                    response = model.generate_content(prompt)
+                    assistant_response = response.text
+                    
+                    # Display assistant response
+                    st.markdown(assistant_response)
+                    
+                    # Add assistant response to chat history
+                    st.session_state.chat_messages.append({"role": "assistant", "content": assistant_response})
+                    
+                except Exception as e:
+                    if "429" in str(e):
+                        error_message = "⚠️ API rate limit reached. Please try again in a few minutes."
+                    else:
+                        error_message = f"⚠️ Error: {str(e)}"
+                    
+                    st.markdown(error_message)
+                    st.session_state.chat_messages.append({"role": "assistant", "content": error_message})
+
 def main():
     st.set_page_config(
         page_title="AI Resume Builder",
@@ -616,7 +676,7 @@ def main():
         st.header("Navigation")
         section = st.radio(
             "Select Resume Section:",
-            ["Personal Info", "Summary", "Education", "Experience", "Skills", "Projects", "Certifications", "AI Report"]
+            ["Personal Info", "Summary", "Education", "Experience", "Skills", "Projects", "Certifications", "AI Report", "Chatbot"]
         )
         
         # Save and export buttons
@@ -717,45 +777,49 @@ def main():
                 if st.button("Generate AI Report"):
                     feedback = generate_ai_summary()
                     st.session_state.feedback = feedback
+        elif section == "Chatbot":
+            render_chatbot()
     
     # Live resume preview column
     with middle_col:
-        st.subheader("Live Resume Preview")
-        preview_html = generate_resume_html_preview(st.session_state.resume_data)
-        st.components.v1.html(preview_html, height=600, scrolling=True)
-        
-        # Add "Export as JPEG" button in the preview column
-        if st.button("Export as JPEG"):
-            if not st.session_state.resume_data.get("personal_info"):
-                st.error("Please complete at least the Personal Info section before exporting.")
-            else:
-                try:
-                    with st.spinner("Generating JPEG..."):
-                        img_buffer = generate_resume_image(st.session_state.resume_data)
-                    
-                    if img_buffer:
-                        # Create filename with timestamp
-                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                        name = "resume"
-                        if st.session_state.resume_data.get("personal_info") and st.session_state.resume_data["personal_info"].get("Full Name"):
-                            name = st.session_state.resume_data["personal_info"]["Full Name"].replace(" ", "_").lower()
+        if section != "Chatbot":
+            st.subheader("Live Resume Preview")
+            preview_html = generate_resume_html_preview(st.session_state.resume_data)
+            st.components.v1.html(preview_html, height=600, scrolling=True)
+            
+            # Add "Export as JPEG" button in the preview column
+            if st.button("Export as JPEG"):
+                if not st.session_state.resume_data.get("personal_info"):
+                    st.error("Please complete at least the Personal Info section before exporting.")
+                else:
+                    try:
+                        with st.spinner("Generating JPEG..."):
+                            img_buffer = generate_resume_image(st.session_state.resume_data)
                         
-                        st.download_button(
-                            label="Download Resume JPEG",
-                            data=img_buffer,
-                            file_name=f"{name}_{timestamp}.jpg",
-                            mime="image/jpeg"
-                        )
-                except Exception as e:
-                    st.error(f"Error generating JPEG: {str(e)}")
+                        if img_buffer:
+                            # Create filename with timestamp
+                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                            name = "resume"
+                            if st.session_state.resume_data.get("personal_info") and st.session_state.resume_data["personal_info"].get("Full Name"):
+                                name = st.session_state.resume_data["personal_info"]["Full Name"].replace(" ", "_").lower()
+                            
+                            st.download_button(
+                                label="Download Resume JPEG",
+                                data=img_buffer,
+                                file_name=f"{name}_{timestamp}.jpg",
+                                mime="image/jpeg"
+                            )
+                    except Exception as e:
+                        st.error(f"Error generating JPEG: {str(e)}")
     
     # Feedback area
     with right_col:
-        st.subheader("AI Feedback")
-        if st.session_state.feedback:
-            st.markdown(st.session_state.feedback)
-        else:
-            st.info("AI feedback will appear here. Use the 'Get AI Feedback' buttons to receive personalized suggestions for your resume content.")
+        if section != "Chatbot":
+            st.subheader("AI Feedback")
+            if st.session_state.feedback:
+                st.markdown(st.session_state.feedback)
+            else:
+                st.info("AI feedback will appear here. Use the 'Get AI Feedback' buttons to receive personalized suggestions for your resume content.")
 
 if __name__ == "__main__":
     main() 
